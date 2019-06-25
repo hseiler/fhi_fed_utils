@@ -2,6 +2,9 @@ import numpy as np
 import scipy
 from scipy.interpolate import interp1d
 import configparser
+import tqdm
+import skued
+
 def read_cfg(path_cfg):
     config = configparser.ConfigParser()
     config.read(path_cfg)
@@ -190,3 +193,25 @@ def sum_peak_pixels(image, peak, window_size):
     uby = int(peak[0]) + window_size
     im_p = image[lby:uby, lbx:ubx]
     return np.nansum(im_p)
+
+
+def peakpos_evolution(file_list, mask_total, laser_bkg, FF, peakpos_all, numrefine, window_size):
+    peakpos_evolution = []
+    no_files  = len(file_list)
+    no_peaks = np.shape(peakpos_all)[0]
+    for idx, f in tqdm.tqdm(enumerate(file_list)):
+        image = np.array(skued.diffread(f), dtype = np.int64)
+        #checks for saturation
+        #if nanmax(nanmax(Image))==65000
+        #    msgbox(['Warning: Image ',num2str(k),' is saturated!'])
+        #    end
+        #Apply mask
+        image = image*mask_total
+        #Substract background and flatfield
+        image = remove_bgk(image, laser_bkg, FF)
+        new_peakpos_all = refine_peakpos_arb_dim(peakpos_all, image, numrefine, window_size)
+        peakpos_evolution.append(new_peakpos_all)
+        peakpos_all = new_peakpos_all
+
+    peakpos_evolution = np.array(peakpos_evolution).reshape(no_files, 2*no_peaks)
+    return peakpos_evolution
