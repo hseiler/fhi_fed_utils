@@ -1,5 +1,5 @@
 from os import path
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 here = path.abspath(path.dirname(__file__))
@@ -15,9 +15,7 @@ setup(
     author_email="seiler.helene@gmail.com",
     description="A set of functions for fed analysis.",
     license="AGPL3",
-    keywords="fed",
     url="https://github.com/hseiler/fhi_fed_utils",
-    packages=[],
     long_description=long_description,  # Optional
     long_description_content_type='text/markdown',
     # Classifiers help users find your project by categorizing it.
