@@ -10,7 +10,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name="fhi_fed_utils",
-    version="0.0.1",
+    version="0.0.2",
     author="Helene Seiler",
     author_email="seiler.helene@gmail.com",
     description="A set of functions for fed analysis.",
