@@ -19,6 +19,7 @@ def mask_image(mask_size, list_of_centers, list_of_radii, mask_inverse=False):
             mask[rr >= radius] = np.nan
     return mask
 
+
 def refine_peakpos_arb_dim(peakpos_all, image, numrefine, window_size):
     new_peakpos_all = np.empty_like(peakpos_all)
     for idx, peak in enumerate(peakpos_all):
