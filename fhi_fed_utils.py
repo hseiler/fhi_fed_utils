@@ -1,6 +1,23 @@
 import numpy as np
 import scipy
 from scipy.interpolate import interp1d
+import configparser
+def read_cfg(path_cfg):
+    config = configparser.ConfigParser()
+    config.read(path_cfg)
+
+    assert 'PATH' in config, "Could not find PATH in the config file."
+    assert 'PARAMETERS' in config, "Could not find PARAMETERS in the config file."
+
+    dict_path = {}
+    for key in config['PATH']:
+        dict_path.update({key: config['PATH'][key]})
+
+    dict_numerics = {}
+    for key in config['PARAMETERS']:
+        dict_numerics.update({key: int(config['PARAMETERS'][key])})
+
+    return dict_path, dict_numerics
 
 
 def mask_image(mask_size, list_of_centers, list_of_radii, mask_inverse=False):
