@@ -33,6 +33,7 @@ setup(
         'Programming Language :: Python :: 3.7',
     ],
     py_modules=["fhi_fed_utils"],
+    packages=find_packages(exclude=["tests"]),
     python_requires='>=3.4, <4',
     install_requires=[
         'scipy',
