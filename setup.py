@@ -37,7 +37,9 @@ setup(
     python_requires='>=3.4, <4',
     install_requires=[
         'scipy',
-        'numpy'
+        'numpy',
+        'tqdm',
+        'scikit-ued'
     ],
     project_urls={  # Optional
         'Bug Reports': 'https://github.com/hseiler/fhi_fed_utils/issues',

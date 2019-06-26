@@ -1,3 +1,5 @@
 pytest
 scipy
 numpy
+tqdm
+scikit-ued
