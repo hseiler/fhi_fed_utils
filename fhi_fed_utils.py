@@ -215,3 +215,59 @@ def peakpos_evolution(file_list, mask_total, laser_bkg, FF, peakpos_all, numrefi
 
     peakpos_evolution = np.array(peakpos_evolution).reshape(no_files, 2*no_peaks)
     return peakpos_evolution
+
+def normalize_pearson(signal_intensity, total_counts, tolerance = 1e-15, max_steps = 10000):
+    corr_int=1
+    offset=0
+    counter=0
+    while corr_int>0:
+        offset=10**counter;
+        signal_intensity_normalized = signal_intensity/(total_counts - offset)
+        #normalize with this offset value
+        #intensity_mean_norm=intensity_mean./(transpose(total_counts)-offset);
+        #calculate correlation with total counts
+        #corr_int=corr(intensity_mean_norm,transpose(total_counts));
+        corr_int, pp = pearsonr(signal_intensity_normalized, total_counts)
+        counter=counter+1
+    offset_min=10**(counter-2)
+    offset_max=10**(counter-1)
+    print(corr_int)
+    print(offset)
+    counter=1
+
+    while abs(corr_int)>tolerance and counter<max_steps:
+        #take new offset value in the middle
+        offset=(offset_max-offset_min)/2+offset_min
+        #normalize with this offset value
+        signal_intensity_normalized = signal_intensity/(total_counts - offset)
+        #calculate correlation with total counts
+        corr_int, pp = pearsonr(signal_intensity_normalized, total_counts)
+        #adjust the offset interval according to the sign of corr_int (the
+        #right offset lies at corr=0, so between positive and negative
+        #correlation)
+        if corr_int<0:
+            offset_max=offset;
+        else:
+            offset_min=offset;
+        counter=counter+1;
+
+    return offset, corr_int
+
+
+def reshape(signal_raw, no_delays, no_scans, exclude):
+    signal_chunked = []
+    for scan in (no_scans):
+        if scans.count(scan) == no_delays:
+            if scan not in exclude:
+                if scan % 2 == 0:
+                    signal_chunked.append(signal_raw[scan * no_delays:scan * no_delays + no_delays, :])
+                elif scan % 2 == 1:
+                    # Stage goes back and forth in our experiment
+                    invert = signal_raw[scan * no_delays:scan * no_delays + no_delays, :][::-1]
+                    signal_chunked.append(invert)
+        else:
+            print('excluding scans ' + str(scan))
+
+    signal_chunked = np.array(signal_chunked)
+    return signal_chunked
+
