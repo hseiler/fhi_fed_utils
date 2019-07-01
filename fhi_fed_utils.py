@@ -255,7 +255,7 @@ def normalize_pearson(signal_intensity, total_counts, tolerance = 1e-15, max_ste
     return offset, corr_int
 
 
-def reshape(signal_raw, no_delays, no_scans, exclude):
+def reshape(signal_raw, no_delays, scans, no_scans, exclude):
     signal_chunked = []
     for scan in (no_scans):
         if scans.count(scan) == no_delays:
