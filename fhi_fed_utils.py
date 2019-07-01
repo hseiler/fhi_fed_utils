@@ -4,6 +4,7 @@ from scipy.interpolate import interp1d
 import configparser
 import tqdm
 import skued
+from scipy.stats import pearsonr
 
 def read_cfg(path_cfg):
     config = configparser.ConfigParser()
