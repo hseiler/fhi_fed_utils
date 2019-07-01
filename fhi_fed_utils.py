@@ -272,3 +272,10 @@ def reshape(signal_raw, no_delays, scans, no_scans, exclude):
     signal_chunked = np.array(signal_chunked)
     return signal_chunked
 
+def normalize_pret0(signal_chunked, delays, t0_cutoff = -1000):
+    idx_neg = np.where(delays < t0_cutoff)[0]
+    signal_chunked_nor = []
+    for chunk in signal_chunked:
+        chunk = chunk/np.mean(chunk[idx_neg], axis = 0)
+        signal_chunked_nor.append(chunk)
+    return signal_chunked_nor
