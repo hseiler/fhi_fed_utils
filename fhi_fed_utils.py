@@ -19,7 +19,10 @@ def read_cfg(path_cfg):
 
     dict_numerics = {}
     for key in config['PARAMETERS']:
-        dict_numerics.update({key: int(config['PARAMETERS'][key])})
+        try:
+            dict_numerics.update({key: int(config['PARAMETERS'][key])})
+        except:
+            dict_numerics.update(config.get("PARAMETERS","peak_index_update_center"))
 
     return dict_path, dict_numerics
 
